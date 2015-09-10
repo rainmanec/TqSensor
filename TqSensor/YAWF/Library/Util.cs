@@ -216,7 +216,7 @@ namespace YAWF
         public static int IntTryParse(string str)
         {
             int i;
-            int.TryParse(str, out i);
+            int.TryParse(str.Trim(), out i);
             return i;
         }
 
@@ -291,6 +291,28 @@ namespace YAWF
             {
                 return tmp.Substring(1);
             }
+        }
+
+        /// <summary>
+        /// 将十进制byte[]转换为16进制字符串
+        /// </summary>
+        /// <param name="bt"></param>
+        /// <returns></returns>
+        public static string ByteToStr16(byte[] bt)
+        {
+            string str = "";
+            for (int i = 0; i < bt.Length; i++)
+            {
+                if (i == bt.Length - 1)
+                {
+                    str += bt[i].ToString("X2");
+                }
+                else
+                {
+                    str += bt[i].ToString("X2") + " ";
+                }
+            }
+            return str;
         }
 
         #endregion

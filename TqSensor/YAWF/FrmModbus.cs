@@ -26,20 +26,7 @@ namespace YAWF
         }
 
         #region 辅助函数
-        /// <summary>
-        /// 将String准换为Int，若str不合法则返回0
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public int IntTryParse(string str)
-        {
-            int i;
-            int.TryParse(str, out i);
-            return i;
-        }
-        /// <summary>
-        /// 初始化界面控件
-        /// </summary>
+        // 初始化界面控件
         private void InitInterface()
         {
 
@@ -52,14 +39,14 @@ namespace YAWF
                 {
                     this.cb_PortName.Items.Add(pt);
                 }
+                if (sPort.Length > 0)
+                {
+                    this.cb_PortName.SelectedIndex = 0;
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception("获取计算机COM口列表失败!\r\n错误信息:" + ex.Message);
-            }
-            if (sPort.Length > 0)
-            {
-                this.cb_PortName.SelectedIndex = 0;
+                // "获取计算机COM口列表失败!\r\n错误信息:" + ex.Message
             }
 
             // 奇偶校验
@@ -95,7 +82,7 @@ namespace YAWF
                 this.cb_DataBits.SelectedIndex = 0;
             }
 
-            // 数据位
+            // 停止位
             string[] sStopBits = new string[] { "1", "2" };
             foreach (string p in sStopBits)
             {
@@ -110,16 +97,14 @@ namespace YAWF
             this.tb_delay.Text = "10";
         }
 
-        /// <summary>
-        /// 重新打开端口
-        /// </summary>
-        private void OpenPort()
+        // 重新打开端口
+        private bool OpenPort()
         {
             // 串口名称
             string _PortName = cb_PortName.Text.ToString();
 
             // 串行波特率
-            int _BaudRate = Convert.ToInt32(cb_BaudRate.Text.ToString());
+            int _BaudRate = Util.IntTryParse(cb_BaudRate.Text.ToString());
 
             // 设置奇偶校验检查协议
             Parity _Particy;
@@ -144,24 +129,24 @@ namespace YAWF
                 _Particy = Parity.None;
             }
 
-            // 设置每个字节的标准数据位长度，此属性的值范围为 5 到 8，默认值为 8。
-            int _DataBits = 8;
+            // 数据位：设置每个字节的标准数据位长度，此属性的值范围为 5 到 8，默认值为 8。
+            int _DataBits = Util.IntTryParse(this.cb_DataBits.Text);
 
-            // 设置每个字节的标准停止位数，StopBits 的默认值为 One。
+            // 停止位：设置每个字节的标准停止位数，StopBits 的默认值为 One。
             StopBits _StopBits = StopBits.One;
-
-            modbus.Open(_PortName, _BaudRate, _DataBits, _Particy, _StopBits);
-
-            // delay
-            int delay = this.IntTryParse(this.tb_delay.Text.Trim());
-            if (delay <= 0)
+            if (this.cb_StopBits.Text.Trim() != "1")
             {
-                this.tb_delay.Text = "0";
+                _StopBits = StopBits.Two;
             }
-            else
-            {
-                this.tb_delay.Text = delay.ToString();
-            }
+
+            // ReadTimeOut && WriteTimeOut
+            int delay = Util.IntTryParse(this.tb_delay.Text);
+            delay = (delay <= 0) ? 10 : delay;
+            this.tb_delay.Text = delay.ToString();
+
+            // 打开串口
+            return modbus.Open(_PortName, _BaudRate, _DataBits, _Particy, _StopBits, delay, delay);
+            
         }
 
         /// <summary>
@@ -181,46 +166,41 @@ namespace YAWF
             }
         }
 
+
+
         /// <summary>
-        /// 将byte[]转换为16进制字符串
+        /// String字符串转换成byte[6]，不添加CRC校验
         /// </summary>
-        /// <param name="bt"></param>
+        /// <param name="str">字符串，不包含CRC校验</param>
         /// <returns></returns>
-        private string ByteToString16(byte[] bt)
+        public byte[] BuildCode(string str)
         {
-            string str = "";
-            for (int i = 0; i < bt.Length; i++)
+            string[] code = str.Split(' ');
+            List<byte> list = new List<byte>();
+            for (int i = 0; i < code.Length; i++)
             {
-                if (i == bt.Length - 1)
+                if (code[i].Trim().Length == 2)
                 {
-                    str += bt[i].ToString("X2");
-                }
-                else
-                {
-                    str += bt[i].ToString("X2") + " ";
+                    int j = -1;
+                    try
+                    {
+                        j = Convert.ToInt32(code[i], 16);   // 16进制转为10进制
+                    }
+                    catch { }
+                    if (j != -1)
+                    {
+                        list.Add((byte)j);
+                    }
                 }
             }
-            return str;
-        }
 
-        public void KANG(byte[] buffer, bool flag)
-        {
-            this.Invoke(
-                new MethodInvoker(
-                    delegate
-                    {
-                        if (buffer.Length == 0)
-                        {
-                            this.AppendText(this.tb_read, "EMPTY");
-                        }
-                        else
-                        {
-                            this.AppendText(this.tb_read, this.ByteToString16(buffer));
-                        }
-                    }
-                )
-            );
-
+            int length = list.Count > 6 ? 6 : list.Count;
+            byte[] result = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = list[i];
+            }
+            return result;
         }
 
         /// <summary>
@@ -231,67 +211,38 @@ namespace YAWF
             // 检测端口
             if (modbus.IsOpen == false)
             {
-                MessageBox.Show("请打开端口");
+                this.AppendText(this.tb_send, "请打开端口");
                 return;
             }
 
             // 检验指令
-            byte[] code = this.modbus.BuildMessage(this.tb_code.Text.Trim());
-            if (code.Length != 6)
+            byte[] message = this.BuildCode(this.tb_code.Text.Trim());
+            if (message.Length != 6)
             {
                 MessageBox.Show("Modbus指令错误!");
                 return;
             }
 
-            modbus.Reset();
-            modbus.OnDataRreceived += new Modbus.DataReceivedEventHander(KANG);
-
-            this.tb_CRC.Text = this.ByteToString16(this.modbus.GetCRC(code));
-            if (modbus.SendModbusData(ref code))
+            byte[] response = null;
+            if (this.modbus.SendFc03(ref message, ref response))
             {
-                this.AppendText(this.tb_send, this.ByteToString16(code));
+                // 发送接收Log
+                this.AppendText(this.tb_send, Util.ByteToStr16(message));
+                this.AppendText(this.tb_read, Util.ByteToStr16(response));
+                // 重置文本框
+                byte[] code = new byte[message.Length - 2];
+                Array.Copy(message, code, message.Length - 2);
+                byte[] CRC = new byte[2];
+                CRC[0] = message[message.Length - 2];
+                CRC[1] = message[message.Length - 1];
+                this.tb_CRC.Text = Util.ByteToStr16(CRC);
+                this.tb_code.Text = Util.ByteToStr16(code);
             }
             else
             {
-                MessageBox.Show(this.modbus.Msg);
+                this.AppendText(this.tb_send, Util.ByteToStr16(message));
+                this.AppendText(this.tb_read, this.modbus.Status);
             }
-            
-
-            /*
-
-            if (!modbus.SendModbusData(ref code))
-            {
-                this.AppendText(this.tb_send, "Send Error:" + this.ByteToString16(code));
-                this.tb_send.Text = "ERROR";
-            }
-            else
-            {
-                */
-            /*
-            this.AppendText(this.tb_send, this.ByteToString16(code));
-            int delay = this.IntTryParse(this.tb_delay.Text.Trim());
-            if (delay > 0)
-            {
-                Thread.Sleep(delay);
-            }
-            byte[] result = null;
-            if (this.modbus.GetModbusData(ref result, cb_CRC.Checked))
-            {
-                if (result != null)
-                {
-                    this.AppendText(this.tb_read, this.ByteToString16(result));
-                }
-                else
-                {
-                    this.AppendText(this.tb_read, "EMPTY");
-                }
-            }
-            else
-            {
-                this.AppendText(this.tb_read, "ERROR:" + this.modbus.status);
-            }
-        }
-            */
         }
         
         #endregion
@@ -307,26 +258,36 @@ namespace YAWF
             string txt = this.btn_setup.Text.Trim();
             if (txt == "打开端口")
             {
-                this.OpenPort();
-                if (this.modbus.IsOpen == false)
+                if (!this.OpenPort())
                 {
-                    MessageBox.Show("串口打开失败");
+                    MessageBox.Show(this.modbus.Status);
                 }
                 else
                 {
                     this.btn_setup.Text = "关闭端口";
+                    this.cb_PortName.Enabled = false;
+                    this.cb_BaudRate.Enabled = false;
+                    this.cb_DataBits.Enabled = false;
+                    this.cb_Parity.Enabled = false;
+                    this.cb_StopBits.Enabled = false;
+                    this.tb_delay.Enabled = false;
                 }
             }
             else
             {
-                this.modbus.Close();
-                if (this.modbus.IsOpen == true)
+                if (!this.modbus.Close())
                 {
                     MessageBox.Show("串口关闭失败");
                 }
                 else
                 {
                     this.btn_setup.Text = "打开端口";
+                    this.cb_PortName.Enabled = true;
+                    this.cb_BaudRate.Enabled = true;
+                    this.cb_DataBits.Enabled = true;
+                    this.cb_Parity.Enabled = true;
+                    this.cb_StopBits.Enabled = true;
+                    this.tb_delay.Enabled = true;
                 }
             }
         }
@@ -339,186 +300,16 @@ namespace YAWF
 
         private void btn_send_Click(object sender, EventArgs e)
         {
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
-            this.SendAndGetData();
+            TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
+            int length = 100;
+            for (int i = 0; i < 100; i++)
+            {
+                this.SendAndGetData();
+            }
+            TimeSpan ts2 = new TimeSpan(DateTime.Now.Ticks);
+            TimeSpan ts = ts1.Subtract(ts2).Duration();
+            double per = (double)ts.TotalMilliseconds / (double)100;
+            MessageBox.Show(string.Format("公用{0}毫秒，发送了{1}条数据，平均用时{2}毫秒", ts.TotalMilliseconds.ToString(), length.ToString(), per.ToString()));
         }
 
         private void tb_code_KeyUp(object sender, KeyEventArgs e)

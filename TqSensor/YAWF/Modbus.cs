@@ -1,175 +1,70 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO.Ports;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace YAWF
 {
     public class Modbus
     {
-        private SerialPort Port = new SerialPort(); // 串口变量
-        public string Msg;              // 错误或成功提示语
-        public int DIR = 1;             // 串口的方向， 1 读取中； 2发送
-        public int LEN = 0;             // 接收时对应的数据长度
-        public decimal CharTime = 0;    // 一个字符的时间
-        public System.Timers.Timer Tm = null;   // 定时器
+        private SerialPort Port = new SerialPort();
+        public string Status;
 
-        // 串口状态
-        public bool IsOpen
-        {
-            get
-            {
-                return this.Port.IsOpen;
-            }
-        }
+        // ����״̬
+        public bool IsOpen { get { return this.Port.IsOpen; } }
 
-        // 超时函数
-        public void TimeOutEvent(object source, System.Timers.ElapsedEventArgs e)
-        {
-            this.DIR = 1;
-            if (this.Port.BytesToRead > 0)
-            {
-                byte[] buffer = new byte[this.Port.BytesToRead];
-                this.Port.Read(buffer, 0, buffer.Length);
-                if (this.OnDataRreceived != null)
-                {
-                    this.OnDataRreceived(buffer, this.CheckCRC(buffer));
-                }
-                this.Port.DiscardInBuffer();
-            }
-            else
-            {
-                this.OnDataRreceived(new byte[0], false);
-            }
-        }
-
-        public void Init()
-        {
-            int parity = (this.Port.Parity != Parity.None) ? 1 : 0;
-            int stopBits = (this.Port.StopBits == StopBits.Two) ? 2 : 1;
-            this.CharTime = (this.Port.DataBits + stopBits + stopBits + parity) / this.Port.BaudRate;
-        }
-
-
-        // 回调函数
-        public delegate void DataReceivedEventHander(byte[] buffer, bool success);    // 定义一个委托
-        public event DataReceivedEventHander OnDataRreceived;           // 生命一个委托变量
-
-        public void Reset()
-        {
-            this.OnDataRreceived = null;
-        }
-
-        // 构造函数
+        #region Constructor / Deconstructor
         public Modbus()
         {
-            this.Port.DataReceived += new SerialDataReceivedEventHandler(SerialPortDataReceivedHandler);
         }
-
-        // DataReceived事件
-        private void SerialPortDataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        ~Modbus()
         {
-            SerialPort port = (SerialPort)sender;
-
-            // 判断需要接收的字节数
-            if (port.BytesToRead >= 2 && this.LEN == 0)
-            {
-                byte[] buffer = new byte[port.BytesToRead];
-                port.Read(buffer, 0, buffer.Length);
-                byte code = buffer[1];
-                if (code == 0x03)
-                {
-                    this.LEN = 7;
-                }
-                else if (code == 0x83)
-                {
-                    this.LEN = 4;
-                }
-            }
-            else
-            {
-                return;
-            }
-
-            try
-            {
-                if (port.BytesToRead >= this.LEN)
-                {
-                    // 重置
-                    this.DIR = 1;
-                    this.LEN = 0;
-                    this.Tm.Dispose();
-                    this.Tm = null;
-
-                    // 读取数据
-                    byte[] buffer = new byte[port.BytesToRead];
-                    port.Read(buffer, 0, buffer.Length);
-                    if (this.OnDataRreceived != null)
-                    {
-                        this.OnDataRreceived(buffer, this.CheckCRC(buffer));
-                    }
-                    port.DiscardInBuffer();
-                }
-                else
-                {
-                    this.Tm.Stop();
-                    this.Tm.Interval = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(this.CharTime * 2))) ;
-                    this.Tm.Start();
-                }
-            }
-            catch
-            {
-                this.DIR = 0;
-            }
-            //MessageBox.Show("BytesToRead:" + port.BytesToRead.ToString() + "   LEN:" + this.LEN.ToString() + "  DIR" + this.DIR);
         }
+        #endregion
 
-        #region 打开端口
-        /// <summary>
-        /// 打开串口
-        /// </summary>
-        /// <param name="portName">串口名称</param>
-        /// <param name="baudRate">波特率</param>
-        /// <param name="databits">数据位长度</param>
-        /// <param name="parity">奇偶校验</param>
-        /// <param name="stopBits">停止位</param>
-        /// <returns></returns>
-        public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits)
+        #region Open / Close Procedures
+        public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits, int readTimeOut, int WriteTimeOut)
         {
+            //Ensure port isn't already opened:
             if (!Port.IsOpen)
             {
+                //Assign desired settings to the serial port:
                 Port.PortName = portName;
                 Port.BaudRate = baudRate;
                 Port.DataBits = databits;
                 Port.Parity = parity;
                 Port.StopBits = stopBits;
-                Port.ReadTimeout = -1;
-                Port.WriteTimeout = 500;
+                //These timeouts are default and cannot be editted through the class at this point:
+                Port.ReadTimeout = readTimeOut;
+                Port.WriteTimeout = WriteTimeOut;
+
                 try
                 {
                     Port.Open();
                 }
                 catch (Exception err)
                 {
-                    Msg = "端口" + portName + "打开失败: " + err.Message;
+                    Status = "����" + portName + "��ʧ��: " + err.Message;
                     return false;
                 }
-                Msg = "端口" + portName + " 打开成功";
+                Status = "����" + portName + "�򿪳ɹ�";
                 return true;
             }
             else
             {
-                Msg = "端口" + portName + " 已经打开";
+                Status = "����" + portName + "�Ѿ��򿪹���";
                 return false;
             }
         }
-        
-        // 关闭串口
+
+        public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits)
+        {
+            return this.Open(portName, baudRate, databits, parity, stopBits, 10, 20);
+        }
+
         public bool Close()
         {
+            //Ensure port is opened before attempting to close:
             if (Port.IsOpen)
             {
                 try
@@ -178,29 +73,23 @@ namespace YAWF
                 }
                 catch (Exception err)
                 {
-                    Msg = "端口" + Port.PortName + "关闭错误: " + err.Message;
+                    Status = "����" + Port.PortName + "�رմ���: " + err.Message;
                     return false;
                 }
-                Msg = "端口" + Port.PortName + "成功关闭";
+                Status = "����" + Port.PortName + "�رճɹ�";
                 return true;
             }
             else
             {
-                Msg = "端口" + Port.PortName + "已经关闭";
+                Status = "����" + Port.PortName + "�Ѿ��رչ���";
                 return false;
             }
         }
         #endregion
 
-        #region 获取CRC校验值
-        /// <summary>
-        /// 获得CRC校验值
-        /// </summary>
-        /// <param name="message">原始byte[]</param>
-        /// <returns>计算后的CRC校验值byte[2]</returns>
-        public byte[] GetCRC(byte[] message)
+        #region CRC Computation
+        private void GetCRC(byte[] message, ref byte[] CRC)
         {
-            byte[] CRC = new byte[2];
             //Function expects a modbus message of any length as well as a 2 byte CRC array in which to 
             //return the CRC values:
 
@@ -208,7 +97,7 @@ namespace YAWF
             byte CRCHigh = 0xFF, CRCLow = 0xFF;
             char CRCLSB;
 
-            for (int i = 0; i < message.Length; i++)
+            for (int i = 0; i < (message.Length) - 2; i++)
             {
                 CRCFull = (ushort)(CRCFull ^ message[i]);
 
@@ -223,22 +112,123 @@ namespace YAWF
             }
             CRC[1] = CRCHigh = (byte)((CRCFull >> 8) & 0xFF);
             CRC[0] = CRCLow = (byte)(CRCFull & 0xFF);
-            return CRC;
         }
         #endregion
 
-        #region 检验CRC
-        /// <summary>
-        /// 返回的数据是否符合CRC校验
-        /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        public bool CheckCRC(byte[] response)
+        #region Build Message
+        private void BuildMessage(byte address, byte type, ushort start, ushort registers, ref byte[] message)
+        {
+            //Array to receive CRC bytes:
+            byte[] CRC = new byte[2];
+
+            message[0] = address;
+            message[1] = type;
+            message[2] = (byte)(start >> 8);
+            message[3] = (byte)start;
+            message[4] = (byte)(registers >> 8);
+            message[5] = (byte)registers;
+
+            GetCRC(message, ref CRC);
+            message[message.Length - 2] = CRC[0];
+            message[message.Length - 1] = CRC[1];
+        }
+        #endregion
+
+        #region Check Response
+        private bool CheckResponse(byte[] response)
         {
             //Perform a basic CRC check:
-            byte[] CRC = GetCRC(response);
+            byte[] CRC = new byte[2];
+            GetCRC(response, ref CRC);
             if (CRC[0] == response[response.Length - 2] && CRC[1] == response[response.Length - 1])
+                return true;
+            else
+                return false;
+        }
+        #endregion
+
+        #region Get Response
+        private void GetResponse(ref byte[] response)
+        {
+            //There is a bug in .Net 2.0 DataReceived Event that prevents people from using this
+            //event as an interrupt to handle data (it doesn't fire all of the time).  Therefore
+            //we have to use the ReadByte command for a fixed length as it's been shown to be reliable.
+            for (int i = 0; i < response.Length; i++)
             {
+                response[i] = (byte)(Port.ReadByte());
+            }
+        }
+        #endregion
+
+        #region Function 16 - Write Multiple Registers
+        public bool SendFc16(byte address, ushort start, ushort registers, short[] values)
+        {
+            //Ensure port is open:
+            if (Port.IsOpen)
+            {
+                //Clear in/out buffers:
+                Port.DiscardOutBuffer();
+                Port.DiscardInBuffer();
+                //Message is 1 addr + 1 fcn + 2 start + 2 reg + 1 count + 2 * reg vals + 2 CRC
+                byte[] message = new byte[9 + 2 * registers];
+                //Function 16 response is fixed at 8 bytes
+                byte[] response = new byte[8];
+
+                //Add bytecount to message:
+                message[6] = (byte)(registers * 2);
+                //Put write values into message prior to sending:
+                for (int i = 0; i < registers; i++)
+                {
+                    message[7 + 2 * i] = (byte)(values[i] >> 8);
+                    message[8 + 2 * i] = (byte)(values[i]);
+                }
+                //Build outgoing message:
+                BuildMessage(address, (byte)16, start, registers, ref message);
+                
+                //Send Modbus message to Serial Port:
+                try
+                {
+                    Port.Write(message, 0, message.Length);
+                    GetResponse(ref response);
+                }
+                catch (Exception err)
+                {
+                    Status = "Error in write event: " + err.Message;
+                    return false;
+                }
+                //Evaluate message:
+                if (CheckResponse(response))
+                {
+                    Status = "Write successful";
+                    return true;
+                }
+                else
+                {
+                    Status = "CRC error";
+                    return false;
+                }
+            }
+            else
+            {
+                Status = "Serial port not open";
+                return false;
+            }
+        }
+        #endregion
+
+        #region Function 3 - Read Registers
+        public bool SendFc03(ref byte[] message, ref short[] values)
+        {
+            byte[] response = null;
+            if (this.SendFc03(ref message, ref response))
+            {
+                //Return requested register values:
+                for (int i = 0; i < (response.Length - 5) / 2; i++)
+                {
+                    values[i] = response[2 * i + 3];
+                    values[i] <<= 8;
+                    values[i] += response[2 * i + 4];
+                }
                 return true;
             }
             else
@@ -246,123 +236,61 @@ namespace YAWF
                 return false;
             }
         }
-        #endregion
-
-        #region BuildMessage
-
-        /// <summary>
-        /// 构造发送Message，不添加CRC校验，返回byte[6]
-        /// </summary>
-        /// <param name="address">从机地址</param>
-        /// <param name="type">功能号</param>
-        /// <param name="start">寄存器地址，十进制整数</param>
-        /// <param name="registers">寄存器数据，十进制整数</param>
-        public byte[] BuildMessage(byte address, byte type, ushort start, ushort registers)
+        public bool SendFc03(ref byte[] message, ref byte[] response)
         {
-            byte[] message = new byte[6];
-            message[0] = address;
-            message[1] = type;
-            message[2] = (byte)(start >> 8);
-            message[3] = (byte)start;
-            message[4] = (byte)(registers >> 8);
-            message[5] = (byte)registers;
-            return message;
-        }
-
-        /// <summary>
-        /// 构造发送Message，不添加CRC校验，返回byte[6]
-        /// </summary>
-        /// <param name="str">字符串，不包含CRC校验</param>
-        /// <returns></returns>
-        public byte[] BuildMessage(string str)
-        {
-            string[] code = str.Split(' ');
-            List<byte> list = new List<byte>();
-            for (int i = 0; i < code.Length; i++)
+            //Ensure port is open:
+            if (Port.IsOpen)
             {
-                if (code[i].Trim().Length == 2)
+                // ����address��start��registers����
+                byte address = (byte)message[0];
+                ushort start = (ushort)Convert.ToInt32(message[2].ToString("X2") + message[3].ToString("X2"), 16);        // �Ĵ�����ַ
+                ushort registers = (ushort)Convert.ToInt32(message[4].ToString("X2") + message[5].ToString("X2"), 16);    // �����ֽ���
+
+                //Clear in/out buffers:
+                Port.DiscardOutBuffer();
+                Port.DiscardInBuffer();
+                //Function 3 request is always 8 bytes:
+                byte[] message02 = new byte[8];
+                //Function 3 response buffer:
+                byte[] response02 = new byte[5 + 2 * registers];
+                //Build outgoing modbus message:
+                BuildMessage(address, (byte)3, start, registers, ref message02);
+                // ����message02
+                message = message02;
+
+                //Send modbus message to Serial Port:
+                try
                 {
-                    int j = -1;
-                    try
-                    {
-                        j = Convert.ToInt32(code[i], 16);   // 16进制转为10进制
-                    }
-                    catch { }
-                    if (j != -1)
-                    {
-                        list.Add((byte)j);
-                    }
+                    Port.Write(message02, 0, message02.Length);
+                    GetResponse(ref response02);
+                }
+                catch (Exception err)
+                {
+                    Status = "Error in read event: " + err.Message;
+                    return false;
+                }
+                //Evaluate message:
+                if (CheckResponse(response02))
+                {
+                    // ����response02
+                    response = response02;
+                    Status = "Read successful";
+                    return true;
+                }
+                else
+                {
+                    Status = "CRC error";
+                    return false;
                 }
             }
-
-            byte[] result = new byte[list.Count];
-            for (int i = 0; i < list.Count; i++)
+            else
             {
-                result[i] = list[i];
+                Status = "Serial port not open";
+                return false;
             }
-            return result;            
+
         }
+        #endregion
 
-#endregion
-
-        /// <summary>
-        /// 打包发送数据，不需要校验位
-        /// </summary>
-        /// <param name="values">byte[]数组，不需要校验位</param>
-        /// <returns></returns>
-        public bool SendModbusData(ref byte[] values)
-        {
-            if (!this.Port.IsOpen)
-            {
-                Msg = "端口没有打开";
-                return false;
-            }
-
-            if (this.DIR == 2)
-            {
-                Msg = "端口处于工作状态，不能发送";
-                return false;
-            }
-
-            this.DIR = 2;
-
-
-            //清除 in/out buffers:
-            Port.DiscardOutBuffer();
-            Port.DiscardInBuffer();
-
-            //打包带有 CRC 验证的modbus 数据包:
-            byte[] response = new byte[values.Length + 2];
-            Array.Copy(values, response, values.Length);
-            byte[] CRC = GetCRC(values);
-            response[response.Length - 2] = CRC[0];
-            response[response.Length - 1] = CRC[1];
-
-            //返回带有 CRC 验证的modbus 数据包
-            values = response; 
-
-            try
-            {
-                // 发送指令
-                Port.Write(response, 0, response.Length);
-                // 读取超时处理
-                this.Tm = new System.Timers.Timer();
-                this.Tm.AutoReset = false;
-                this.Tm.Enabled = true;
-                this.Tm.Interval = 50;
-                this.Tm.Elapsed += new System.Timers.ElapsedEventHandler(this.TimeOutEvent);
-                Thread.Sleep(Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(this.CharTime * response.Length))));
-                return true;
-            }
-            catch (Exception err)
-            {
-                Msg = "数据写入错误: " + err.Message;
-                return false;
-            }
-            finally
-            {
-                this.DIR = 1;
-            }
-        }
     }
 }

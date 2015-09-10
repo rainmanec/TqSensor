@@ -116,6 +116,7 @@
             this.tb_send.Location = new System.Drawing.Point(17, 76);
             this.tb_send.Multiline = true;
             this.tb_send.Name = "tb_send";
+            this.tb_send.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tb_send.Size = new System.Drawing.Size(350, 312);
             this.tb_send.TabIndex = 7;
             // 
@@ -270,6 +271,7 @@
             this.tb_read.Location = new System.Drawing.Point(393, 75);
             this.tb_read.Multiline = true;
             this.tb_read.Name = "tb_read";
+            this.tb_read.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tb_read.Size = new System.Drawing.Size(350, 313);
             this.tb_read.TabIndex = 42;
             // 
