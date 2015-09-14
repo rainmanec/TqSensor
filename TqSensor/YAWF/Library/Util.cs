@@ -319,6 +319,29 @@ namespace YAWF
 
 
         #region 通用函数
+
+        /// <summary>
+        /// 获取1970-01-01至dt的毫秒数
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public long GetTime(DateTime dt)
+        {
+            DateTime dt1970 = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return (dt.Ticks - dt1970.Ticks) / 1000;
+        }
+
+        /// <summary>
+        /// 根据毫秒数计算日期
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <returns></returns>
+        public DateTime NewDate(long ms)
+        {
+            DateTime dt1970 = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            long t = dt1970.Ticks + ms * 1000;
+            return new DateTime(t);
+        }
         /// <summary>
         /// Md5加密字符串
         /// </summary>

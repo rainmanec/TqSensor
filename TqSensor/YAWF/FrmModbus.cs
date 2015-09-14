@@ -301,8 +301,8 @@ namespace YAWF
         private void btn_send_Click(object sender, EventArgs e)
         {
             TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
-            int length = 100;
-            for (int i = 0; i < 100; i++)
+            int length = 1000;
+            for (int i = 0; i < length; i++)
             {
                 this.SendAndGetData();
             }
