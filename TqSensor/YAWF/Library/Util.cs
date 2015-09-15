@@ -321,25 +321,25 @@ namespace YAWF
         #region 通用函数
 
         /// <summary>
-        /// 获取1970-01-01至dt的毫秒数
+        /// 获取1970-01-01至dateTime的毫秒数
         /// </summary>
-        /// <param name="dt"></param>
+        /// <param name="dateTime"></param>
         /// <returns></returns>
-        public long GetTime(DateTime dt)
+        public static long GetTimestamp(DateTime dateTime)
         {
             DateTime dt1970 = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return (dt.Ticks - dt1970.Ticks) / 1000;
+            return (dateTime.Ticks - dt1970.Ticks) / 10000;
         }
 
         /// <summary>
-        /// 根据毫秒数计算日期
+        /// 根据时间戳timestamp（单位毫秒）计算日期
         /// </summary>
-        /// <param name="ms"></param>
+        /// <param name="timestamp"></param>
         /// <returns></returns>
-        public DateTime NewDate(long ms)
+        public static DateTime NewDate(long timestamp)
         {
             DateTime dt1970 = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            long t = dt1970.Ticks + ms * 1000;
+            long t = dt1970.Ticks + timestamp * 10000;
             return new DateTime(t);
         }
         /// <summary>
