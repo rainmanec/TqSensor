@@ -20,7 +20,7 @@ namespace YAWF
         /// <summary>
         /// 快速调用函数的内部连接字符串
         /// </summary>
-        public static string ConnectionString = "";
+        public static string ConnectionString = System.Environment.CurrentDirectory + "\\Data\\" + "mydata.db";
 
 
         /// <summary>

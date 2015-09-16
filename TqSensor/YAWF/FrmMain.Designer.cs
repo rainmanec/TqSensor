@@ -33,6 +33,7 @@
             this.tsmi_logout = new System.Windows.Forms.ToolStripMenuItem();
             this.modbus调试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.串口调试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +42,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmi_logout,
             this.modbus调试ToolStripMenuItem,
-            this.串口调试ToolStripMenuItem});
+            this.串口调试ToolStripMenuItem,
+            this.设置ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(894, 25);
@@ -66,6 +68,13 @@
             this.串口调试ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.串口调试ToolStripMenuItem.Text = "串口调试";
             this.串口调试ToolStripMenuItem.Click += new System.EventHandler(this.串口调试ToolStripMenuItem_Click);
+            // 
+            // 设置ToolStripMenuItem
+            // 
+            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.设置ToolStripMenuItem.Text = "设置";
+            this.设置ToolStripMenuItem.Click += new System.EventHandler(this.设置ToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -93,6 +102,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmi_logout;
         private System.Windows.Forms.ToolStripMenuItem modbus调试ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 串口调试ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
 
     }
 }

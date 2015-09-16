@@ -49,6 +49,7 @@
             this.Controls.Add(this.button1);
             this.Name = "FrmTest";
             this.Text = "FrmTest";
+            this.Load += new System.EventHandler(this.FrmTest_Load);
             this.ResumeLayout(false);
 
         }

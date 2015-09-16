@@ -15,7 +15,7 @@ namespace YAWF
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmModbus());
+            Application.Run(new FrmMain());
         }
     }
 }

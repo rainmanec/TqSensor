@@ -40,24 +40,30 @@
             this.cb_DataBits = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tb_Rad_Modbus_Code = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tb_Nm_Modbus_Code = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.tb_ReadSpeed = new System.Windows.Forms.TextBox();
+            this.tb_Kw_Range_End = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.tb_Kw_Range_Begin = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.tb_Rad_Range_End = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tb_Rad_Range_Begin = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.tb_Nm_Range_End = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tb_Nm_Range_Begin = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.btn_Submit = new System.Windows.Forms.Button();
+            this.btn_Close = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +82,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(12, 22);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(759, 137);
+            this.groupBox1.Size = new System.Drawing.Size(425, 126);
             this.groupBox1.TabIndex = 38;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "串口参数";
@@ -100,7 +106,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(29, 95);
+            this.label6.Location = new System.Drawing.Point(17, 96);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 35;
@@ -135,7 +141,7 @@
             // cb_StopBits
             // 
             this.cb_StopBits.FormattingEnabled = true;
-            this.cb_StopBits.Location = new System.Drawing.Point(88, 91);
+            this.cb_StopBits.Location = new System.Drawing.Point(76, 92);
             this.cb_StopBits.Name = "cb_StopBits";
             this.cb_StopBits.Size = new System.Drawing.Size(121, 20);
             this.cb_StopBits.TabIndex = 4;
@@ -168,30 +174,162 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.tb_Rad_Modbus_Code);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.tb_Nm_Modbus_Code);
+            this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.textBox7);
-            this.groupBox2.Controls.Add(this.textBox5);
+            this.groupBox2.Controls.Add(this.tb_ReadSpeed);
+            this.groupBox2.Controls.Add(this.tb_Kw_Range_End);
             this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Controls.Add(this.textBox6);
+            this.groupBox2.Controls.Add(this.tb_Kw_Range_Begin);
             this.groupBox2.Controls.Add(this.label16);
-            this.groupBox2.Controls.Add(this.textBox3);
+            this.groupBox2.Controls.Add(this.tb_Rad_Range_End);
             this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Controls.Add(this.textBox4);
+            this.groupBox2.Controls.Add(this.tb_Rad_Range_Begin);
             this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Controls.Add(this.textBox2);
+            this.groupBox2.Controls.Add(this.tb_Nm_Range_End);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.tb_Nm_Range_Begin);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(21, 177);
+            this.groupBox2.Location = new System.Drawing.Point(12, 167);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(425, 204);
+            this.groupBox2.Size = new System.Drawing.Size(425, 220);
             this.groupBox2.TabIndex = 39;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "基本参数";
+            // 
+            // tb_Rad_Modbus_Code
+            // 
+            this.tb_Rad_Modbus_Code.Location = new System.Drawing.Point(94, 180);
+            this.tb_Rad_Modbus_Code.Name = "tb_Rad_Modbus_Code";
+            this.tb_Rad_Modbus_Code.Size = new System.Drawing.Size(198, 21);
+            this.tb_Rad_Modbus_Code.TabIndex = 55;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(26, 184);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(65, 12);
+            this.label18.TabIndex = 54;
+            this.label18.Text = "转速指令：";
+            // 
+            // tb_Nm_Modbus_Code
+            // 
+            this.tb_Nm_Modbus_Code.Location = new System.Drawing.Point(94, 150);
+            this.tb_Nm_Modbus_Code.Name = "tb_Nm_Modbus_Code";
+            this.tb_Nm_Modbus_Code.Size = new System.Drawing.Size(198, 21);
+            this.tb_Nm_Modbus_Code.TabIndex = 53;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(26, 154);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(65, 12);
+            this.label17.TabIndex = 52;
+            this.label17.Text = "扭矩指令：";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(152, 124);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 12);
+            this.label9.TabIndex = 51;
+            this.label9.Text = "次/秒";
+            // 
+            // tb_ReadSpeed
+            // 
+            this.tb_ReadSpeed.Location = new System.Drawing.Point(94, 120);
+            this.tb_ReadSpeed.Name = "tb_ReadSpeed";
+            this.tb_ReadSpeed.Size = new System.Drawing.Size(50, 21);
+            this.tb_ReadSpeed.TabIndex = 50;
+            // 
+            // tb_Kw_Range_End
+            // 
+            this.tb_Kw_Range_End.Location = new System.Drawing.Point(178, 91);
+            this.tb_Kw_Range_End.Name = "tb_Kw_Range_End";
+            this.tb_Kw_Range_End.Size = new System.Drawing.Size(50, 21);
+            this.tb_Kw_Range_End.TabIndex = 49;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(239, 96);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(53, 12);
+            this.label15.TabIndex = 48;
+            this.label15.Text = "单位：kw";
+            // 
+            // tb_Kw_Range_Begin
+            // 
+            this.tb_Kw_Range_Begin.Location = new System.Drawing.Point(94, 90);
+            this.tb_Kw_Range_Begin.Name = "tb_Kw_Range_Begin";
+            this.tb_Kw_Range_Begin.Size = new System.Drawing.Size(50, 21);
+            this.tb_Kw_Range_Begin.TabIndex = 47;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(152, 95);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(17, 12);
+            this.label16.TabIndex = 46;
+            this.label16.Text = "到";
+            // 
+            // tb_Rad_Range_End
+            // 
+            this.tb_Rad_Range_End.Location = new System.Drawing.Point(178, 61);
+            this.tb_Rad_Range_End.Name = "tb_Rad_Range_End";
+            this.tb_Rad_Range_End.Size = new System.Drawing.Size(50, 21);
+            this.tb_Rad_Range_End.TabIndex = 45;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(239, 66);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(83, 12);
+            this.label13.TabIndex = 44;
+            this.label13.Text = "单位：rad/min";
+            // 
+            // tb_Rad_Range_Begin
+            // 
+            this.tb_Rad_Range_Begin.Location = new System.Drawing.Point(94, 60);
+            this.tb_Rad_Range_Begin.Name = "tb_Rad_Range_Begin";
+            this.tb_Rad_Range_Begin.Size = new System.Drawing.Size(50, 21);
+            this.tb_Rad_Range_Begin.TabIndex = 43;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(152, 65);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(17, 12);
+            this.label14.TabIndex = 42;
+            this.label14.Text = "到";
+            // 
+            // tb_Nm_Range_End
+            // 
+            this.tb_Nm_Range_End.Location = new System.Drawing.Point(178, 31);
+            this.tb_Nm_Range_End.Name = "tb_Nm_Range_End";
+            this.tb_Nm_Range_End.Size = new System.Drawing.Size(50, 21);
+            this.tb_Nm_Range_End.TabIndex = 40;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(239, 36);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 12);
+            this.label4.TabIndex = 39;
+            this.label4.Text = "单位：N";
             // 
             // label7
             // 
@@ -202,12 +340,12 @@
             this.label7.TabIndex = 38;
             this.label7.Text = "读取速度：";
             // 
-            // textBox1
+            // tb_Nm_Range_Begin
             // 
-            this.textBox1.Location = new System.Drawing.Point(94, 31);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(50, 21);
-            this.textBox1.TabIndex = 37;
+            this.tb_Nm_Range_Begin.Location = new System.Drawing.Point(94, 31);
+            this.tb_Nm_Range_Begin.Name = "tb_Nm_Range_Begin";
+            this.tb_Nm_Range_Begin.Size = new System.Drawing.Size(50, 21);
+            this.tb_Nm_Range_Begin.TabIndex = 37;
             // 
             // label8
             // 
@@ -245,111 +383,36 @@
             this.label12.TabIndex = 33;
             this.label12.Text = "功率量程：";
             // 
-            // textBox2
+            // btn_Submit
             // 
-            this.textBox2.Location = new System.Drawing.Point(178, 31);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(50, 21);
-            this.textBox2.TabIndex = 40;
+            this.btn_Submit.Location = new System.Drawing.Point(132, 399);
+            this.btn_Submit.Name = "btn_Submit";
+            this.btn_Submit.Size = new System.Drawing.Size(75, 23);
+            this.btn_Submit.TabIndex = 40;
+            this.btn_Submit.Text = "保存";
+            this.btn_Submit.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // btn_Close
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(239, 36);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 12);
-            this.label4.TabIndex = 39;
-            this.label4.Text = "单位：N";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(178, 61);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(50, 21);
-            this.textBox3.TabIndex = 45;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(239, 66);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(83, 12);
-            this.label13.TabIndex = 44;
-            this.label13.Text = "单位：rad/min";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(94, 60);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(50, 21);
-            this.textBox4.TabIndex = 43;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(152, 65);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(17, 12);
-            this.label14.TabIndex = 42;
-            this.label14.Text = "到";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(178, 91);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(50, 21);
-            this.textBox5.TabIndex = 49;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(239, 96);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(53, 12);
-            this.label15.TabIndex = 48;
-            this.label15.Text = "单位：kw";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(94, 90);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(50, 21);
-            this.textBox6.TabIndex = 47;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(152, 95);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(17, 12);
-            this.label16.TabIndex = 46;
-            this.label16.Text = "到";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(94, 120);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(50, 21);
-            this.textBox7.TabIndex = 50;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(152, 124);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(35, 12);
-            this.label9.TabIndex = 51;
-            this.label9.Text = "次/秒";
+            this.btn_Close.Location = new System.Drawing.Point(240, 399);
+            this.btn_Close.Name = "btn_Close";
+            this.btn_Close.Size = new System.Drawing.Size(75, 23);
+            this.btn_Close.TabIndex = 41;
+            this.btn_Close.Text = "关闭";
+            this.btn_Close.UseVisualStyleBackColor = true;
             // 
             // FrmConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 455);
+            this.ClientSize = new System.Drawing.Size(449, 431);
+            this.Controls.Add(this.btn_Close);
+            this.Controls.Add(this.btn_Submit);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "FrmConfig";
             this.Text = "FrmSet";
+            this.Load += new System.EventHandler(this.FrmConfig_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -373,23 +436,29 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tb_Nm_Range_Begin;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tb_Nm_Range_End;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox tb_Rad_Range_End;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox tb_Rad_Range_Begin;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox tb_Kw_Range_End;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox tb_Kw_Range_Begin;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox tb_ReadSpeed;
+        private System.Windows.Forms.TextBox tb_Rad_Modbus_Code;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox tb_Nm_Modbus_Code;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button btn_Submit;
+        private System.Windows.Forms.Button btn_Close;
 
     }
 }

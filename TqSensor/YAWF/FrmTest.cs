@@ -20,5 +20,10 @@ namespace YAWF
         {
 
         }
+
+        private void FrmTest_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

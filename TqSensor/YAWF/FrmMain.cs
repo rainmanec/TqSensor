@@ -41,6 +41,14 @@ namespace YAWF
             frm.Show();
         }
 
+        private void 设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmConfig frm = new FrmConfig();
+            //frm.WindowState = FormWindowState.Maximized;
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
     
     }
 }
