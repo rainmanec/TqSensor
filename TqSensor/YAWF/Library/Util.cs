@@ -56,6 +56,10 @@ namespace YAWF
                     }
                 }
             }
+            else if (dbType == DbType.String)
+            {
+                parm.Value = value.ToString().Trim();
+            }
             else
             {
                 parm.Value = value;

@@ -89,6 +89,7 @@
             // 
             // cb_PortName
             // 
+            this.cb_PortName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_PortName.FormattingEnabled = true;
             this.cb_PortName.Location = new System.Drawing.Point(76, 30);
             this.cb_PortName.Name = "cb_PortName";
@@ -97,6 +98,7 @@
             // 
             // cb_BaudRate
             // 
+            this.cb_BaudRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_BaudRate.FormattingEnabled = true;
             this.cb_BaudRate.Location = new System.Drawing.Point(76, 59);
             this.cb_BaudRate.Name = "cb_BaudRate";
@@ -114,6 +116,7 @@
             // 
             // cb_Parity
             // 
+            this.cb_Parity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_Parity.FormattingEnabled = true;
             this.cb_Parity.Location = new System.Drawing.Point(282, 28);
             this.cb_Parity.Name = "cb_Parity";
@@ -140,6 +143,7 @@
             // 
             // cb_StopBits
             // 
+            this.cb_StopBits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_StopBits.FormattingEnabled = true;
             this.cb_StopBits.Location = new System.Drawing.Point(76, 92);
             this.cb_StopBits.Name = "cb_StopBits";
@@ -157,6 +161,7 @@
             // 
             // cb_DataBits
             // 
+            this.cb_DataBits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_DataBits.FormattingEnabled = true;
             this.cb_DataBits.Location = new System.Drawing.Point(282, 58);
             this.cb_DataBits.Name = "cb_DataBits";
@@ -391,6 +396,7 @@
             this.btn_Submit.TabIndex = 40;
             this.btn_Submit.Text = "保存";
             this.btn_Submit.UseVisualStyleBackColor = true;
+            this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
             // 
             // btn_Close
             // 

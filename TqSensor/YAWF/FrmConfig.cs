@@ -88,18 +88,41 @@ namespace YAWF
                 this.cb_StopBits.SelectedIndex = 0;
             }
 
+            // 文本框的值
+            this.tb_Kw_Range_Begin.Text = Util.GetTbConfig("Kw_Range_Begin");
+            this.tb_Kw_Range_End.Text = Util.GetTbConfig("Kw_Range_End");
+            this.tb_Nm_Range_Begin.Text = Util.GetTbConfig("Nm_Range_Begin");
+            this.tb_Nm_Range_End.Text = Util.GetTbConfig("Nm_Range_End");
+            this.tb_Rad_Range_Begin.Text = Util.GetTbConfig("Rad_Range_Begin");
+            this.tb_Kw_Range_End.Text = Util.GetTbConfig("Kw_Range_End");
+            this.tb_Nm_Modbus_Code.Text = Util.GetTbConfig("Nm_Modbus_Code");
+            this.tb_Rad_Modbus_Code.Text = Util.GetTbConfig("Rad_Modbus_Code");
+            this.tb_ReadSpeed.Text = Util.GetTbConfig("ReadSpeed");
         }
 
-        private string GetConfig(string key)
-        {
-            SQLiteParameter p_key = Util.NewSQLiteParameter("@p_key", DbType.String, );
-
-
-        }
 
         private void FrmConfig_Load(object sender, EventArgs e)
         {
             this.InitInterface();
+        }
+
+        private void btn_Submit_Click(object sender, EventArgs e)
+        {
+            this.tb_Nm_Range_Begin.Text = Util.IntTryParse(this.tb_Nm_Range_Begin.Text).ToString();
+            this.tb_Nm_Range_End.Text = Util.IntTryParse(this.tb_Nm_Range_End.Text).ToString();
+            this.tb_Rad_Range_Begin.Text = Util.IntTryParse(this.tb_Rad_Range_Begin.Text).ToString();
+            this.tb_Rad_Range_End.Text = Util.IntTryParse(this.tb_Rad_Range_End.Text).ToString();
+            this.tb_Kw_Range_Begin.Text = Util.IntTryParse(this.tb_Kw_Range_Begin.Text).ToString();
+            this.tb_Kw_Range_End.Text = Util.IntTryParse(this.tb_Kw_Range_End.Text).ToString();
+
+            Util.SetTbConfig("Nm_Range_Begin", this.tb_Nm_Range_Begin.Text);
+            Util.SetTbConfig("Nm_Range_End", this.tb_Nm_Range_End.Text);
+            Util.SetTbConfig("Rad_Range_Begin", this.tb_Rad_Range_Begin.Text);
+            Util.SetTbConfig("Rad_Range_End", this.tb_Rad_Range_End.Text);
+            Util.SetTbConfig("Kw_Range_Begin", this.tb_Kw_Range_Begin.Text);
+            Util.SetTbConfig("Kw_Range_End", this.tb_Kw_Range_End.Text);
+            Util.SetTbConfig("Nm_Modbus_Code", this.tb_Nm_Modbus_Code.Text);
+            Util.SetTbConfig("Rad_Modbus_Code", this.tb_Rad_Modbus_Code.Text);
         }
     }
 }
