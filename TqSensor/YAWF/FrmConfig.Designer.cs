@@ -64,6 +64,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.btn_Submit = new System.Windows.Forms.Button();
             this.btn_Close = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -89,7 +91,6 @@
             // 
             // cb_PortName
             // 
-            this.cb_PortName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_PortName.FormattingEnabled = true;
             this.cb_PortName.Location = new System.Drawing.Point(76, 30);
             this.cb_PortName.Name = "cb_PortName";
@@ -103,7 +104,7 @@
             this.cb_BaudRate.Location = new System.Drawing.Point(76, 59);
             this.cb_BaudRate.Name = "cb_BaudRate";
             this.cb_BaudRate.Size = new System.Drawing.Size(121, 20);
-            this.cb_BaudRate.TabIndex = 1;
+            this.cb_BaudRate.TabIndex = 2;
             // 
             // label6
             // 
@@ -121,7 +122,7 @@
             this.cb_Parity.Location = new System.Drawing.Point(282, 28);
             this.cb_Parity.Name = "cb_Parity";
             this.cb_Parity.Size = new System.Drawing.Size(121, 20);
-            this.cb_Parity.TabIndex = 2;
+            this.cb_Parity.TabIndex = 1;
             // 
             // label5
             // 
@@ -179,6 +180,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.tb_Rad_Modbus_Code);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.tb_Nm_Modbus_Code);
@@ -213,7 +216,7 @@
             this.tb_Rad_Modbus_Code.Location = new System.Drawing.Point(94, 180);
             this.tb_Rad_Modbus_Code.Name = "tb_Rad_Modbus_Code";
             this.tb_Rad_Modbus_Code.Size = new System.Drawing.Size(198, 21);
-            this.tb_Rad_Modbus_Code.TabIndex = 55;
+            this.tb_Rad_Modbus_Code.TabIndex = 13;
             // 
             // label18
             // 
@@ -229,7 +232,7 @@
             this.tb_Nm_Modbus_Code.Location = new System.Drawing.Point(94, 150);
             this.tb_Nm_Modbus_Code.Name = "tb_Nm_Modbus_Code";
             this.tb_Nm_Modbus_Code.Size = new System.Drawing.Size(198, 21);
-            this.tb_Nm_Modbus_Code.TabIndex = 53;
+            this.tb_Nm_Modbus_Code.TabIndex = 12;
             // 
             // label17
             // 
@@ -254,14 +257,14 @@
             this.tb_ReadSpeed.Location = new System.Drawing.Point(94, 120);
             this.tb_ReadSpeed.Name = "tb_ReadSpeed";
             this.tb_ReadSpeed.Size = new System.Drawing.Size(50, 21);
-            this.tb_ReadSpeed.TabIndex = 50;
+            this.tb_ReadSpeed.TabIndex = 11;
             // 
             // tb_Kw_Range_End
             // 
             this.tb_Kw_Range_End.Location = new System.Drawing.Point(178, 91);
             this.tb_Kw_Range_End.Name = "tb_Kw_Range_End";
             this.tb_Kw_Range_End.Size = new System.Drawing.Size(50, 21);
-            this.tb_Kw_Range_End.TabIndex = 49;
+            this.tb_Kw_Range_End.TabIndex = 10;
             // 
             // label15
             // 
@@ -277,7 +280,7 @@
             this.tb_Kw_Range_Begin.Location = new System.Drawing.Point(94, 90);
             this.tb_Kw_Range_Begin.Name = "tb_Kw_Range_Begin";
             this.tb_Kw_Range_Begin.Size = new System.Drawing.Size(50, 21);
-            this.tb_Kw_Range_Begin.TabIndex = 47;
+            this.tb_Kw_Range_Begin.TabIndex = 9;
             // 
             // label16
             // 
@@ -293,7 +296,7 @@
             this.tb_Rad_Range_End.Location = new System.Drawing.Point(178, 61);
             this.tb_Rad_Range_End.Name = "tb_Rad_Range_End";
             this.tb_Rad_Range_End.Size = new System.Drawing.Size(50, 21);
-            this.tb_Rad_Range_End.TabIndex = 45;
+            this.tb_Rad_Range_End.TabIndex = 8;
             // 
             // label13
             // 
@@ -309,7 +312,7 @@
             this.tb_Rad_Range_Begin.Location = new System.Drawing.Point(94, 60);
             this.tb_Rad_Range_Begin.Name = "tb_Rad_Range_Begin";
             this.tb_Rad_Range_Begin.Size = new System.Drawing.Size(50, 21);
-            this.tb_Rad_Range_Begin.TabIndex = 43;
+            this.tb_Rad_Range_Begin.TabIndex = 7;
             // 
             // label14
             // 
@@ -325,7 +328,7 @@
             this.tb_Nm_Range_End.Location = new System.Drawing.Point(178, 31);
             this.tb_Nm_Range_End.Name = "tb_Nm_Range_End";
             this.tb_Nm_Range_End.Size = new System.Drawing.Size(50, 21);
-            this.tb_Nm_Range_End.TabIndex = 40;
+            this.tb_Nm_Range_End.TabIndex = 6;
             // 
             // label4
             // 
@@ -350,7 +353,7 @@
             this.tb_Nm_Range_Begin.Location = new System.Drawing.Point(94, 31);
             this.tb_Nm_Range_Begin.Name = "tb_Nm_Range_Begin";
             this.tb_Nm_Range_Begin.Size = new System.Drawing.Size(50, 21);
-            this.tb_Nm_Range_Begin.TabIndex = 37;
+            this.tb_Nm_Range_Begin.TabIndex = 5;
             // 
             // label8
             // 
@@ -406,6 +409,25 @@
             this.btn_Close.TabIndex = 41;
             this.btn_Close.Text = "关闭";
             this.btn_Close.UseVisualStyleBackColor = true;
+            this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(299, 154);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(65, 12);
+            this.label19.TabIndex = 56;
+            this.label19.Text = "无需校验位";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(299, 184);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(65, 12);
+            this.label20.TabIndex = 57;
+            this.label20.Text = "无需校验位";
             // 
             // FrmConfig
             // 
@@ -416,7 +438,11 @@
             this.Controls.Add(this.btn_Submit);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmConfig";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmSet";
             this.Load += new System.EventHandler(this.FrmConfig_Load);
             this.groupBox1.ResumeLayout(false);
@@ -465,6 +491,8 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button btn_Submit;
         private System.Windows.Forms.Button btn_Close;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
 
     }
 }

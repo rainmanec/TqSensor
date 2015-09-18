@@ -18,6 +18,40 @@ namespace YAWF
     {
 
         #region 项目函数库
+        /// <summary>
+        /// String字符串转换成byte[6]，不添加CRC校验
+        /// </summary>
+        /// <param name="str">字符串，不包含CRC校验</param>
+        /// <returns></returns>
+        public static byte[] BuildCode(string str)
+        {            
+            string[] code = str.Trim().Split(' ');
+            List<byte> list = new List<byte>();
+            for (int i = 0; i < code.Length; i++)
+            {
+                if (code[i].Trim().Length == 2)
+                {
+                    int j = -1;
+                    try
+                    {
+                        j = Convert.ToInt32(code[i], 16);   // 16进制转为10进制
+                    }
+                    catch { }
+                    if (j != -1)
+                    {
+                        list.Add((byte)j);
+                    }
+                }
+            }
+
+            int length = list.Count > 6 ? 6 : list.Count;
+            byte[] result = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = list[i];
+            }
+            return result;
+        }
 
         /// <summary>
         /// 生成密钥

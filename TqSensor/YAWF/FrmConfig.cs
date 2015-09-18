@@ -98,6 +98,13 @@ namespace YAWF
             this.tb_Nm_Modbus_Code.Text = Util.GetTbConfig("Nm_Modbus_Code");
             this.tb_Rad_Modbus_Code.Text = Util.GetTbConfig("Rad_Modbus_Code");
             this.tb_ReadSpeed.Text = Util.GetTbConfig("ReadSpeed");
+
+            //ComboBox的值
+            this.cb_PortName.Text = Util.GetTbConfig("PortName");
+            this.cb_Parity.Text = Util.GetTbConfig("Parity");
+            this.cb_BaudRate.Text = Util.GetTbConfig("BaudRate");
+            this.cb_DataBits.Text = Util.GetTbConfig("DataBits");
+            this.cb_StopBits.Text = Util.GetTbConfig("StopBits");
         }
 
 
@@ -108,21 +115,70 @@ namespace YAWF
 
         private void btn_Submit_Click(object sender, EventArgs e)
         {
+            // Modbus检测
+            if (this.tb_Nm_Modbus_Code.Text.Trim() != "")
+            {
+                byte[] code = Util.BuildCode(this.tb_Nm_Modbus_Code.Text);
+                if (code.Length != 6)
+                {
+                    MessageBox.Show("扭矩Modbus指令不正确！");
+                    return;
+                }
+                else
+                {
+                    this.tb_Nm_Modbus_Code.Text = Util.ByteToStr16(code);
+                }
+            }
+            if (this.tb_Rad_Modbus_Code.Text.Trim() != "")
+            {
+                byte[] code = Util.BuildCode(this.tb_Rad_Modbus_Code.Text);
+                if (code.Length != 6)
+                {
+                    MessageBox.Show("转速Modbus指令不正确！");
+                    return;
+                }
+                else
+                {
+                    this.tb_Rad_Modbus_Code.Text = Util.ByteToStr16(code);
+                }
+            }
+
+
+            // 文本框的值
             this.tb_Nm_Range_Begin.Text = Util.IntTryParse(this.tb_Nm_Range_Begin.Text).ToString();
             this.tb_Nm_Range_End.Text = Util.IntTryParse(this.tb_Nm_Range_End.Text).ToString();
             this.tb_Rad_Range_Begin.Text = Util.IntTryParse(this.tb_Rad_Range_Begin.Text).ToString();
             this.tb_Rad_Range_End.Text = Util.IntTryParse(this.tb_Rad_Range_End.Text).ToString();
             this.tb_Kw_Range_Begin.Text = Util.IntTryParse(this.tb_Kw_Range_Begin.Text).ToString();
             this.tb_Kw_Range_End.Text = Util.IntTryParse(this.tb_Kw_Range_End.Text).ToString();
+            try
+            {
+                Util.SetTbConfig("Nm_Range_Begin", this.tb_Nm_Range_Begin.Text);
+                Util.SetTbConfig("Nm_Range_End", this.tb_Nm_Range_End.Text);
+                Util.SetTbConfig("Rad_Range_Begin", this.tb_Rad_Range_Begin.Text);
+                Util.SetTbConfig("Rad_Range_End", this.tb_Rad_Range_End.Text);
+                Util.SetTbConfig("Kw_Range_Begin", this.tb_Kw_Range_Begin.Text);
+                Util.SetTbConfig("Kw_Range_End", this.tb_Kw_Range_End.Text);
+                Util.SetTbConfig("Nm_Modbus_Code", this.tb_Nm_Modbus_Code.Text);
+                Util.SetTbConfig("Rad_Modbus_Code", this.tb_Rad_Modbus_Code.Text);
 
-            Util.SetTbConfig("Nm_Range_Begin", this.tb_Nm_Range_Begin.Text);
-            Util.SetTbConfig("Nm_Range_End", this.tb_Nm_Range_End.Text);
-            Util.SetTbConfig("Rad_Range_Begin", this.tb_Rad_Range_Begin.Text);
-            Util.SetTbConfig("Rad_Range_End", this.tb_Rad_Range_End.Text);
-            Util.SetTbConfig("Kw_Range_Begin", this.tb_Kw_Range_Begin.Text);
-            Util.SetTbConfig("Kw_Range_End", this.tb_Kw_Range_End.Text);
-            Util.SetTbConfig("Nm_Modbus_Code", this.tb_Nm_Modbus_Code.Text);
-            Util.SetTbConfig("Rad_Modbus_Code", this.tb_Rad_Modbus_Code.Text);
+                //ComboBox的值
+                Util.SetTbConfig("PortName", this.cb_PortName.Text);
+                Util.SetTbConfig("Parity", this.cb_Parity.Text);
+                Util.SetTbConfig("BaudRate", this.cb_BaudRate.Text);
+                Util.SetTbConfig("DataBits", this.cb_DataBits.Text);
+                Util.SetTbConfig("StopBits", this.cb_StopBits.Text);
+                MessageBox.Show("保存成功");
+            }
+            catch
+            {
+                MessageBox.Show("保存失败");
+            }
+        }
+
+        private void btn_Close_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

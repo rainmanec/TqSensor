@@ -166,8 +166,6 @@ namespace YAWF
             }
         }
 
-
-
         /// <summary>
         /// String字符串转换成byte[6]，不添加CRC校验
         /// </summary>
