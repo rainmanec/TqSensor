@@ -11,9 +11,9 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace YAWF
 {
-    public partial class Form2 : Form
+    public partial class FormDetect : Form
     {
-        public Form2()
+        public FormDetect()
         {
             InitializeComponent();
         }
@@ -21,12 +21,12 @@ namespace YAWF
         public int date = 0;
         public bool IsFirstPoint = false;   // 默认Point;
 
-        public int max_nm = 9000;
-        public int min_nm = 7000;
-        public int max_rad = 300;
-        public int min_rad = 5;
-        public int max_kw = 6000;
-        public int min_kw = 100;
+        public int max_nm = 0;
+        public int min_nm = 0;
+        public int max_rad = 0;
+        public int min_rad = 0;
+        public int max_kw = 0;
+        public int min_kw = 0;
         public List<double> list_nm = new List<double>();
         public List<double> list_rad = new List<double>();
         public List<double> list_kw = new List<double>();
@@ -53,6 +53,16 @@ namespace YAWF
         }
 
         #region 辅助函数
+
+        private void InitConfig()
+        {
+            this.min_nm = Util.IntTryParse(Util.GetTbConfig("Nm_Range_Begin"));
+            this.max_nm = Util.IntTryParse(Util.GetTbConfig("Nm_Range_End"));
+            this.min_nm = Util.IntTryParse(Util.GetTbConfig("Rad_Range_Begin"));
+            this.max_nm = Util.IntTryParse(Util.GetTbConfig("Rad_Range_End"));
+            this.min_kw = Util.IntTryParse(Util.GetTbConfig("Kw_Range_Begin"));
+            this.max_kw = Util.IntTryParse(Util.GetTbConfig("Kw_Range_End"));
+        }
 
         public double[] AnalyzeDataList(List<double> list)
         {

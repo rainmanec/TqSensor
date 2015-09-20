@@ -94,7 +94,7 @@ namespace YAWF
             this.tb_Nm_Range_Begin.Text = Util.GetTbConfig("Nm_Range_Begin");
             this.tb_Nm_Range_End.Text = Util.GetTbConfig("Nm_Range_End");
             this.tb_Rad_Range_Begin.Text = Util.GetTbConfig("Rad_Range_Begin");
-            this.tb_Kw_Range_End.Text = Util.GetTbConfig("Kw_Range_End");
+            this.tb_Rad_Range_End.Text = Util.GetTbConfig("Rad_Range_End");
             this.tb_Nm_Modbus_Code.Text = Util.GetTbConfig("Nm_Modbus_Code");
             this.tb_Rad_Modbus_Code.Text = Util.GetTbConfig("Rad_Modbus_Code");
             this.tb_ReadSpeed.Text = Util.GetTbConfig("ReadSpeed");

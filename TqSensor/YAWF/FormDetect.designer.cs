@@ -1,6 +1,6 @@
 ﻿namespace YAWF
 {
-    partial class Form2
+    partial class FormDetect
     {
         /// <summary>
         /// Required designer variable.
